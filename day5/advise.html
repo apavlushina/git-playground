@@ -1,0 +1,90 @@
+<html>
+<style>
+    h1 {
+        margin: 25px;
+        text-align: center;
+        color: darkblue;
+        text-shadow: #5a51e5;
+
+    }
+    img {
+        display: block;
+        margin: 50px auto;  
+        width: 720px;
+    }
+
+    .keyword {
+        outline: none;
+        display: block;
+        margin: 0 auto;
+        padding: 10px;
+        width: 400px;
+        height: 75px;
+        border: 2px solid #5a51e5;
+        border-radius: 15%;
+        text-align: center;
+    }
+
+    .advise {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 20px auto;
+        padding: 10px;
+        width: 800px;
+        height: 75px;
+        border: 2px solid #5a51e5;
+        border-radius: 15%;
+        text-align: center;
+    }
+</style>
+
+
+    <body>
+        <h1>Press the magic ball and you will have your free advise</h1>
+        <img src="./ball.jpg" onclick="getAdvise()""></img>
+        <input class="keyword" type="text" placeholder="any special requests?  -  type it here and press enter" 
+                value="" onkeypress="getSpecialAdvise(event)">
+        <input class='advise' type="text" disabled value="">
+        <script src='script.js'></script>
+    </body>
+
+    <script>
+    const advise = document.querySelector('.advise')
+     
+    
+
+    function getAdvise () {
+    fetch("https://api.adviceslip.com/advice") // make the request
+    .then(response => response.json()) // convert response to json
+    .then(myJson => { // display data in the browser
+        advise.value =
+        JSON.stringify(myJson.slip.advice, null, " ")
+    })
+}
+
+
+    getAdvise ()
+
+
+    function getSpecialAdvise(e) {
+    const keyword = document.querySelector('.keyword')
+    const search = keyword.value
+    const URL = `https://api.adviceslip.com/advice/search/${keyword.value}`
+    if (e.keyCode == 13) {
+        console.log('serch', search)
+        console.log('URL', URL)
+        console.log('was click 13')
+            fetch(URL) // make the request
+                .then(response => response.json()) // convert response to json
+                .then(myJson => { // display data in the browser
+            console.log("lol", myJson.slips[0].advice)
+            advise.value =
+            JSON.stringify(myJson.slips[0].advice, null, " ")
+        })
+  }
+}
+    
+
+
+    </script>
+</html>
